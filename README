@@ -1,0 +1,25 @@
+
+REQUIREMENTS (Linux)
+
+First install a C compiler, git, and cpanminus:
+
+  $ sudo apt-get install build-essential git-core
+  $ wget -O - http://cpanmin.us | sudo perl - --self-upgrade
+
+Second install this repository either by git
+
+  $ git clone git@github.com:gbv/swib11app.git
+  $ cd swib11app
+
+or as plain copy
+  
+  $ wget http://github.com/gbv/swib11app/zipball/master
+
+Third install required CPAN modules:
+
+  $ sudo cpanm --installdeps ./app
+
+
+REQUIREMENTS (Windows)
+
+...
