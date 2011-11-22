@@ -1,25 +1,40 @@
-
 REQUIREMENTS (Linux)
 
-First install a C compiler, git, and cpanminus:
+First, install a C compiler, git (optional), and cpanminus:
 
   $ sudo apt-get install build-essential git-core
   $ wget -O - http://cpanmin.us | sudo perl - --self-upgrade
 
-Second install this repository either by git
+Second, install this repository either by git:
 
   $ git clone git@github.com:gbv/swib11app.git
-  $ cd swib11app
 
-or as plain copy
+or as snapshot zipfile (if you don't have git):
   
   $ wget http://github.com/gbv/swib11app/zipball/master
+  $ unzip master
+  $ mv gbv-swib11app-* swib11app
 
-Third install required CPAN modules:
+Third, install required CPAN modules with cpanminus:
 
+  $ cd swib11app
   $ sudo cpanm --installdeps ./app
 
 
 REQUIREMENTS (Windows)
 
-...
+First, install Cygwin with Perl and cpanminus.
+
+Second, install this repository either by git from
+
+  git@github.com:gbv/swib11app.git 
+
+or as snapshot zipfile from
+
+  http://github.com/gbv/swib11app/zipball/master
+
+Third, start a command line in the 'swib11app' directory
+and install required CPAN modules with cpanminus:
+
+  $ sudo cpanm --installdeps ./app
+
