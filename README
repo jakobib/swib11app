@@ -1,4 +1,16 @@
-REQUIREMENTS (Linux)
+# MANIFEST
+
+  swib11app/
+   |-- dotcloud.yml          dotCloud configuration
+   |-- README                this file
+   |-- app/                  application root
+        |--- app.psgi        core startup file as PSGI application
+        |--- Makefile.PL     CPAN dependencies
+        |--- nginx.conf      nginx proxy configuration
+        |--- lib/            additional non-CPAN libraries
+        |--- htdocs/         static files and templates
+
+# REQUIREMENTS (Linux)
 
 First, install a C compiler, git (optional), and cpanminus:
 
@@ -20,8 +32,7 @@ Third, install required CPAN modules with cpanminus:
   $ cd swib11app
   $ sudo cpanm --installdeps ./app
 
-
-REQUIREMENTS (Windows)
+# REQUIREMENTS (Windows)
 
 First, install Cygwin with Perl and cpanminus.
 
