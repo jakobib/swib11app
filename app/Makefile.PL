@@ -17,5 +17,7 @@ WriteMakefile(
 
 		# Zusätzliche Module
 		'LWP::Simple' => 0,
+        'File::Spec::Functions' => 0,
+        'File::Basename' => 0,
 	}
 );
