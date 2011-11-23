@@ -1,14 +1,17 @@
 # MANIFEST
 
     swib11app/
-     |-- dotcloud.yml          dotCloud configuration
-     |-- README                this file
-     |-- app/                  application root
-          |--- app.psgi        core startup file as PSGI application
-          |--- Makefile.PL     CPAN dependencies
-          |--- nginx.conf      nginx proxy configuration
-          |--- lib/            additional non-CPAN libraries
-          |--- htdocs/         static files and templates
+     |-- dotcloud.yml             dotCloud configuration
+     |-- README                   this file
+     |-- app/                     application root
+          |--- app.psgi           core startup file as PSGI application
+          |--- Makefile.PL        CPAN dependencies
+          |--- nginx.conf         nginx proxy configuration
+          |--- lib/               additional non-CPAN libraries
+                |-- SWIB11App.pm  the core application
+          |--- htdocs/            static files and templates
+                |-- htdocs        HTML and other files to serve via HTTP
+                     |-- rdf/     Static RDF data files
 
 # REQUIREMENTS (Linux)
 
@@ -74,4 +77,4 @@ If you work with git, this will only push the latest master revision,
 so you may need to do a commit first. The first push will take some time
 to install all CPAN modules at dotCloud.
 
-
+A demo is running live at http://swib11app-nichtich.dotcloud.com/

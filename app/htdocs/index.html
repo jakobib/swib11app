@@ -1,6 +1,31 @@
+<!DOCTYPE html>
 <html>
-<head></head>
+<head>
+  <meta charset='utf-8'>
+  <link rel="stylesheet" href="/style.css" type="text/css" />
+</head>
 <body>
-...
-</body>
-</html>
+[% title = uri %]
+<h1>[% title %]</h1>
+
+[% IF uri.type('foaf:Person') %]
+  [% name = uri.foaf_name %]
+  <h2>A person</h2>
+  <p><b>Name:</b> [% name %]</p>
+  [% IF uri.foaf_knows %]
+    <p><b>Knows:</b>
+      [% FOREACH q = uri.foaf_knows_ %]
+        [% IF NOT loop.first %], [% END %]
+        <a href="[% q.href %]">
+         [% IF q.foaf_name; q.foaf_name.esc ; ELSE ; q ; END %]
+        </a> 
+      [% END %]
+    </p>
+  [% END %]
+[% END %]
+
+<!-- show current RDF data -->
+<hr/>
+[% uri.graph.ttlpre %]
+
+[% INCLUDE "footer.html" %]

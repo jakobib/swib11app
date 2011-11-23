@@ -6,6 +6,8 @@ use File::Spec::Functions qw(catdir rel2abs);
 use File::Basename qw(dirname);
 my $PWD = dirname($0);
 
+my $HTDOCS = rel2abs(catdir($PWD,'htdocs'));
+
 # find local modules in 'lib' directory
 use lib 'lib'; #rel2abs(catdir($PWD,'lib'));
 
@@ -26,13 +28,14 @@ my $SOURCE = rdflow(
 
 # core functionality put into this package
 use SWIB11App;
-my $app = SWIB11App->new(
+my $swib11app = SWIB11App->new(
     base   => $BASE,
     source => $SOURCE
 );
  
 # web application stack
 use Plack::Builder;
+use Plack::Middleware::TemplateToolkit;
 
 builder {
 
@@ -47,7 +50,7 @@ builder {
     # static files from directory 'htdocs'
     enable 'Static',
             path => qr{\.(gif|png|jpg|ico|js|css|xsl)$},
-            root => rel2abs(catdir($PWD,'htdocs'));
+            root => $HTDOCS;
 
     # retrieve and possibly serve RDF data from $SOURCE
     enable 'JSONP';
@@ -57,5 +60,36 @@ builder {
 	    	namespaces   => $NS,
 		    pass_through => 1;
 
-    $app;
+    # core driver
+    enable sub { 
+        my $app = shift;
+        sub { 
+            my $env = shift;
+            $env->{'tt.vars'} = { } unless $env->{'tt.vars'};
+            $env->{'tt.vars'}->{'uri'} = $env->{'rdflow.uri'};
+#            $env->{'tt.vars'}->{'formats'} = keys %FORMATS;
+
+            my $response = $swib11app->call( $env );
+
+            # direct response
+            return $response if $response;
+
+            # otherwise pass to Plack::Middleware::TemplateToolkit
+            $env->{'tt.vars'}->{error}     = $env->{'rdflow.error'};
+            $env->{'tt.vars'}->{timestamp} = $env->{'rdflow.timestamp'};
+            $env->{'tt.vars'}->{cached} = 1 if $env->{'rdflow.cached'};
+
+            $app->($env);
+        }
+    };
+
+    Plack::Middleware::TemplateToolkit->new( 
+        INCLUDE_PATH => $HTDOCS,
+        RELATIVE => 1,
+        INTERPOLATE => 1, 
+        pass_through => 0,
+        request_vars => [qw(base)],
+        404 => '404.html', 
+        500 => '500.html'
+    );
 };

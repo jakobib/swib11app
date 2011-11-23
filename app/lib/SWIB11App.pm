@@ -11,6 +11,9 @@ use Plack::Util::Accessor qw(source base);
 use RDF::NS;
 my $NS = RDF::NS->new('20111102');
 
+# hack to be fixed in RDF::NS
+delete $NS->{$_} for qw(new uri can isa);
+
 use RDF::Lazy;
 use CGI qw(escapeHTML);
 use Data::Dumper;
@@ -30,17 +33,19 @@ sub prepare_app {
 sub call {
     my ($self, $env) = @_;
 
-    # TODO: enable TemplateToolkit and use RDF::Lazy
-
-    my $ttl = rdfdump($env->{'rdflow.data'});
+    # RDF data retrieved via RDF::Flow ($self->source)
+    my $rdf = $env->{'rdflow.data'};
     my $uri = $env->{'rdflow.uri'};
-    my $h1  = $uri; #escapeHTML( uri_unescape( $uri ) );
-    my @html = "<body><h1><a href='". escapeHTML($uri) . "'>$h1</a></h1>".
-                   "<pre>" . escapeHTML($ttl) . "</pre></body>" . Dumper($self->source);
-    return [ 200, [ 'Content-Type', 'text/html; charset=UTF8' ], [ @html ] ]; 
 
+    if ( $rdf and $rdf->size ) {
+        my $lazy = RDF::Lazy->new( $rdf, namespaces => $NS );
+        $env->{'tt.vars'}->{'uri'} = $lazy->resource($uri);
+    }
 
-    return [ 404, [ 'Content-Type' => 'text/html' ], [ "Not found\n" ] ];
+    # set the specific template
+    $env->{'tt.template'} = 'index.html';
+    
+    return; # no PSGI return, so pass to next middleware
 }
 
 1;

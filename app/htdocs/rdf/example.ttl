@@ -1,3 +1,15 @@
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
 
 <http://example.org/hello> rdf:value "world!" .
+
+<http://example.org/Alice> a foaf:Person ;
+    foaf:name "Alice" ;
+    foaf:knows <http://example.org/Bob> .
+
+<http://example.org/Bob> a foaf:Person ;
+    foaf:name "Bob" ;
+    foaf:knows <http://example.org/Alice> , <http://example.org/Clara> .
+
+<http://example.org/Clara> a foaf:Person ;
+    foaf:name "Clara" .
