@@ -37,7 +37,7 @@ Third, install required CPAN modules with cpanminus:
 
 # REQUIREMENTS (Windows)
 
-First, install Cygwin with Perl and cpanminus.
+First, install Strawberry Perl or Cygwin with Perl and cpanminus.
 
 Second, install this repository either by git from
 
