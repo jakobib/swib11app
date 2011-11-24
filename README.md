@@ -22,7 +22,7 @@ First, install a C compiler, git (optional), and cpanminus:
 
 Second, install this repository either by git:
 
-    git clone git@github.com:gbv/swib11app.git
+    git clone git://github.com/gbv/swib11app.git
 
 or as snapshot zipfile (if you don't have git):
   
@@ -41,7 +41,7 @@ First, install Strawberry Perl or Cygwin with Perl and cpanminus.
 
 Second, install this repository either by git from
 
-  git@github.com:gbv/swib11app.git 
+  git://github.com/gbv/swib11app.git
 
 or as snapshot zipfile from
 
