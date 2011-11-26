@@ -17,7 +17,8 @@ my $LOGLEVEL = ($PLACK_ENV eq 'deployment' ? 'warn' : 'trace');
 
 # Lazy RDF namespaces
 use RDF::NS;
-my $NS = RDF::NS->new('20111102');
+our $NS;
+BEGIN { $NS = RDF::NS->new('20111102'); }
 
 # basic source of RDF data
 use RDF::Flow;
@@ -25,6 +26,25 @@ my $BASE = "http://example.org/";
 my $SOURCE = rdflow( 
     from => rel2abs(catdir($PWD,'htdocs','rdf')), 
     name => "directory 'rdf'" );
+
+# if RDF::Trine::Exporter::GraphViz is installed, provide graphical RDF
+our %FORMATS; 
+BEGIN {
+    %FORMATS = (
+        nt   => 'ntriples', 
+        rdf  => 'rdfxml', 
+        xml  => 'rdfxml',
+        ttl  => 'turtle',
+        json => 'rdfjson',
+    );
+    eval "use RDF::Trine::Exporter::GraphViz;";
+    unless ($@) {
+        foreach (qw(svg png dot)) {
+            $FORMATS{$_} = RDF::Trine::Exporter::GraphViz->new( 
+                as => $_, namespaces => $NS );
+        }
+    }
+}
 
 # core functionality put into this package
 use SWIB11App;
@@ -58,7 +78,8 @@ builder {
 		    base         => $BASE,
     		source       => $SOURCE,
 	    	namespaces   => $NS,
-		    pass_through => 1;
+		    pass_through => 1,
+            formats      => \%FORMATS;
 
     # core driver
     enable sub { 
@@ -67,7 +88,7 @@ builder {
             my $env = shift;
             $env->{'tt.vars'} = { } unless $env->{'tt.vars'};
             $env->{'tt.vars'}->{'uri'} = $env->{'rdflow.uri'};
-#            $env->{'tt.vars'}->{'formats'} = keys %FORMATS;
+            $env->{'tt.vars'}->{'formats'} = [ keys %FORMATS ];
 
             my $response = $swib11app->call( $env );
 

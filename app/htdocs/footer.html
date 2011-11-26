@@ -1,4 +1,13 @@
 <div id="footer">
+[%IF uri %]
+  &lt;<a href="${uri.href}">$uri</a>&gt;
+  [% FOREACH f IN formats %]
+    <a href="?format=$f">$f</a>
+  [% END %]
+[% END %]
+<div>[% timestamp %][% IF cached %] (cached)[% END %]</div>
+
+<div>
   A Linked Data web application based on 
   <a href="http://search.cpan.org/dist/Plack/">Plack</a>, 
   <a href="http://search.cpan.org/dist/RDF::Trine/">RDF::Trine</a>,
@@ -6,6 +15,7 @@
   <a href="http://search.cpan.org/dist/Plack-Middleware-TemplateToolkit/">Plack::Middleware::TemplateToolkit</a>, 
   <a href="http://search.cpan.org/dist/RDF::Lazy/">RDF::Lazy</a>,
   and <a href="http://search.cpan.org/dist/RDF-NS/">RDF::NS</a>.
+</div>
 </div>
 </body>
 </html>

@@ -3,21 +3,24 @@ use ExtUtils::MakeMaker;
 WriteMakefile(
     PREREQ_PM => {
 
-		# Plack, Log::Contextual, TemplateToolkit und RDF::Flow
-		'Plack::Middleware::TemplateToolkit' => '0.25',
-		'Plack::Middleware::Log::Contextual' => '0',
-		'Plack::Middleware::RDF::Flow' => 0,
+        # Plack, Log::Contextual, TemplateToolkit und RDF::Flow
+        'Plack::Middleware::TemplateToolkit' => '0.25',
+        'Plack::Middleware::Log::Contextual' => '0',
+        'Plack::Middleware::RDF::Flow' => 0,
 
-		'RDF::Trine' => '0.136',
-		'RDF::Lazy' => 0,
+        'RDF::Trine' => '0.136',
+        'RDF::Lazy' => 0,
 
-		# Ebenfalls hilfreich
-		'RDF::NS' => '2011102',
-		'RDF::Dumper' => 0,
+        # Graphische Visualisierung
+        'RDF::Trine::Exporter::GraphViz' => '0.003',
 
-		# Zusätzliche Module
-		'LWP::Simple' => 0,
+        # Ebenfalls hilfreich
+        'RDF::NS' => '2011102',
+        'RDF::Dumper' => 0,
+
+        # Zusätzliche Module
+        'LWP::Simple' => 0,
         'File::Spec::Functions' => 0,
         'File::Basename' => 0,
-	}
+    }
 );
