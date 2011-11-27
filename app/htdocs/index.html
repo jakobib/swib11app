@@ -24,6 +24,11 @@
   [% END %]
 [% END %]
 
+[% uri2 = uri.owl_sameAs %]
+[% IF uri2 %]
+  <p>[% uri2.rdfs_comment %]</p>
+[% END %]
+
 <!-- show current RDF data -->
 <hr/>
 [% uri.graph.ttlpre %]

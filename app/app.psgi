@@ -20,11 +20,35 @@ use RDF::NS;
 my $NS = RDF::NS->new('20111102');
 
 # basic source of RDF data
-use RDF::Flow;
+use RDF::Flow qw(rdflow union);
 my $BASE = "http://example.org/";
+#my $BASE = "http://de.dbpedia.org/resource/";
 my $SOURCE = rdflow( 
     from => rel2abs(catdir($PWD,'htdocs','rdf')), 
     name => "directory 'rdf'" );
+
+# in addition, get DBPedia
+use RDF::Flow::LinkedData;
+my $dbpedia = RDF::Flow::LinkedData->new(
+    name => "DBPedia",
+	match => sub { 
+		# http://example.org/ABC => http://de.dbpedia.org/resource/ABC
+		$_[0] =~ s{^$BASE}{http://de.dbpedia.org/resource/};
+	},
+);
+
+# more source in its own package
+use RDF::Flow::Union;
+use SWIB11Source;
+
+my $swib11source = SWIB11Source->new;
+$swib11source->base($BASE);
+
+$SOURCE = union(
+	$SOURCE,
+	$dbpedia,
+    $swib11source,
+);
 
 # core functionality put into this package
 use SWIB11App;
