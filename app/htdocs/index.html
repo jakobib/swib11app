@@ -5,32 +5,38 @@
   <link rel="stylesheet" href="/style.css" type="text/css" />
 </head>
 <body>
-[% title = uri %]
-<h1>[% title %]</h1>
-
-[% IF uri.type('foaf:Person') %]
-  [% name = uri.foaf_name %]
-  <h2>A person</h2>
-  <p><b>Name:</b> [% name %]</p>
-  [% IF uri.foaf_knows %]
-    <p><b>Knows:</b>
-      [% FOREACH q = uri.foaf_knows_ %]
-        [% IF NOT loop.first %], [% END %]
-        <a href="[% q.href %]">
-         [% IF q.foaf_name; q.foaf_name.esc ; ELSE ; q ; END %]
-        </a> 
-      [% END %]
-    </p>
+[% o = uri %]
+[% title = o.rel('foaf:name|rdfs:label') %]
+[% IF NOT title; title = uri; END %]
+<h1>
+  $title
+  [% IF o.foaf_page %]
+    <a href="$o.foaf_page">&#x2197;</a>
   [% END %]
+</h1>
+
+[% IF o.type('foaf:Person') %]
+  [% name = o.foaf_name %]
+  <h2>$name ist eine Person</h2>
 [% END %]
 
-[% uri2 = uri.owl_sameAs %]
-[% IF uri2 %]
-  <p>[% uri2.rdfs_comment %]</p>
+[% IF o.foaf_knows %]
+<p><b>Knows:</b>
+  [% FOREACH q = o.foaf_knows_ %]
+	[% IF NOT loop.first %], [% END %]
+	<a href="$q.href">
+	 [% IF q.foaf_name; q.foaf_name.esc ; ELSE ; q ; END %]
+	</a> 
+  [% END %]
+</p>
+[% END %]
+
+[% IF o.rdfs_comment %]
+  <p>$o.rdfs_comment</p>
 [% END %]
 
 <!-- show current RDF data -->
 <hr/>
-[% uri.graph.ttlpre %]
+[% o.graph.ttlpre %]
 
 [% INCLUDE "footer.html" %]
