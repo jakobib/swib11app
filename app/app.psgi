@@ -37,18 +37,18 @@ my $dbpedia = RDF::Flow::LinkedData->new(
 	},
 );
 
-# more source in its own package
 use RDF::Flow::Union;
-use SWIB11Source;
+use RDF::Flow::URIMap;
 
-my $swib11source = SWIB11Source->new;
-$swib11source->base($BASE);
+# map dbpedia URI to our local URI
+my $map = RDF::Flow::URIMap->new;
+$map->map( sub { s{^http://de.dbpedia.org/resource/}{$BASE}; } );
+# $map->map( sub { s{^$BASE}{http://de.dbpedia.org/resource/}g; } );
 
 $SOURCE = union(
 	$SOURCE,
 	$dbpedia,
-    $swib11source,
-);
+)->pipe_to($map);
 
 # core functionality put into this package
 use SWIB11App;
